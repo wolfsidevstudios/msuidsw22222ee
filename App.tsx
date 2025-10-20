@@ -241,10 +241,9 @@ const App: React.FC = () => {
 
     try {
         console.log('Requesting Bluetooth device...');
-        // FIX: Cast navigator to 'any' to access the Web Bluetooth API.
+        // FIX: Remove invalid `optionalServices` parameter.
         const device: BluetoothDevice = await (navigator as any).bluetooth.requestDevice({
             acceptAllDevices: true,
-            optionalServices: ['audio_sink']
         });
 
         if (!device) return;
