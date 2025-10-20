@@ -1,0 +1,5 @@
+{
+  "name": "Offline Music Player",
+  "description": "Upload your local audio files and listen to them anytime, even offline. A modern music streaming experience right in your browser.",
+  "requestFramePermissions": []
+}
