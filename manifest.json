@@ -1,6 +1,6 @@
 {
-  "name": "Offline Music Player",
-  "short_name": "Music Player",
+  "name": "rocioramirezpena",
+  "short_name": "rocioramirezpena",
   "description": "Upload your local audio files and listen to them anytime, even offline. A modern music streaming experience right in your browser.",
   "start_url": ".",
   "display": "standalone",

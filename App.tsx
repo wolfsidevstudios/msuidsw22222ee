@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Track } from './types';
 import { getAllTracksFromDB, addTrackToDB, deleteTrackFromDB, updateTrackInDB } from './services/db';
@@ -235,7 +234,7 @@ const App: React.FC = () => {
           <div className="max-w-4xl mx-auto p-4 flex justify-between items-center">
               <div className='flex items-center space-x-2'>
                   <span className="material-symbols-outlined text-3xl text-spotify-green">podcasts</span>
-                  <h1 className="text-xl font-bold">Offline Player</h1>
+                  <h1 className="text-xl font-bold">rocioramirezpena</h1>
               </div>
               <FileUpload onFilesSelected={handleFilesSelected} isLoading={isUploading} />
           </div>
