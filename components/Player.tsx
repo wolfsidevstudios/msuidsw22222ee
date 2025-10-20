@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { Track } from '../types';
-import { ChevronUpIcon } from './icons';
+import { ChevronUpIcon, BluetoothIcon, BluetoothConnectedIcon } from './icons';
 
 interface PlayerProps {
   track: Track | null;
@@ -15,9 +14,16 @@ interface PlayerProps {
   onSeek: (time: number) => void;
   onVolumeChange: (volume: number) => void;
   onExpand: () => void;
+  isBluetoothSupported: boolean;
+  isBluetoothConnected: boolean;
+  onBluetoothConnect: () => void;
 }
 
-const Player: React.FC<PlayerProps> = ({ track, isPlaying, duration, currentTime, volume, onPlayPause, onNext, onPrev, onSeek, onVolumeChange, onExpand }) => {
+const Player: React.FC<PlayerProps> = ({ 
+    track, isPlaying, duration, currentTime, volume, 
+    onPlayPause, onNext, onPrev, onSeek, onVolumeChange, onExpand,
+    isBluetoothSupported, isBluetoothConnected, onBluetoothConnect 
+}) => {
   const [coverArtUrl, setCoverArtUrl] = useState('');
 
   useEffect(() => {
@@ -112,8 +118,17 @@ const Player: React.FC<PlayerProps> = ({ track, isPlaying, duration, currentTime
         </div>
       </div>
       
-      {/* Volume Controls */}
+      {/* Volume & Device Controls */}
       <div className="flex items-center justify-end space-x-3 row-start-1 col-start-2 md:col-start-3">
+        {isBluetoothSupported && (
+            <button 
+                onClick={onBluetoothConnect} 
+                className={`transition-colors ${isBluetoothConnected ? 'text-blue-500 hover:text-blue-400' : 'text-gray-400 hover:text-white'}`}
+                title={isBluetoothConnected ? 'Disconnect from Bluetooth device' : 'Connect to Bluetooth device'}
+            >
+                {isBluetoothConnected ? <BluetoothConnectedIcon className="w-5 h-5"/> : <BluetoothIcon className="w-5 h-5"/>}
+            </button>
+        )}
         <button onClick={handleVolumeToggle} className="text-gray-400 hover:text-white transition-colors">
             {volume > 0 ? <span className="material-symbols-outlined">volume_up</span> : <span className="material-symbols-outlined">volume_off</span>}
         </button>

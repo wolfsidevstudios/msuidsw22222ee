@@ -8,6 +8,17 @@ import UploadOverlay from './components/UploadOverlay';
 import TrackEditorModal from './components/TrackEditorModal';
 import NowPlayingView from './components/NowPlayingView';
 
+// FIX: Define BluetoothDevice interface to handle missing Web Bluetooth API types.
+interface BluetoothDevice {
+    id: string;
+    name: string | null;
+    gatt?: {
+        connected: boolean;
+        disconnect: () => void;
+    };
+    addEventListener(type: 'gattserverdisconnected', listener: (this: this, ev: any) => any): void;
+}
+
 
 const App: React.FC = () => {
   const [tracks, setTracks] = useState<Track[]>([]);
@@ -23,10 +34,19 @@ const App: React.FC = () => {
   const [editingTrackId, setEditingTrackId] = useState<number | null>(null);
   const [isNowPlayingVisible, setIsNowPlayingVisible] = useState<boolean>(false);
 
+  // New state for Bluetooth
+  const [isBluetoothSupported, setIsBluetoothSupported] = useState(false);
+  const [bluetoothDevice, setBluetoothDevice] = useState<BluetoothDevice | null>(null);
+
   const audioRef = useRef<HTMLAudioElement>(null);
   const [currentTrackUrl, setCurrentTrackUrl] = useState<string>('');
 
   useEffect(() => {
+    // Check for Web Bluetooth and Audio Output API support
+    if ('bluetooth' in navigator && typeof (HTMLAudioElement.prototype as any).setSinkId !== 'undefined') {
+        setIsBluetoothSupported(true);
+    }
+
     const loadTracks = async () => {
       const dbTracks = await getAllTracksFromDB();
       setTracks(dbTracks);
@@ -47,7 +67,7 @@ const App: React.FC = () => {
             audioRef.current.play().catch(e => console.error("Error playing audio:", e));
         }
     }
-  }, [currentTrackUrl]);
+  }, [currentTrackUrl, isPlaying]); // isPlaying added to dependency array
 
   useEffect(() => {
       return () => {
@@ -196,6 +216,62 @@ const App: React.FC = () => {
     setEditingTrackId(null);
   };
 
+  const handleBluetoothConnect = useCallback(async () => {
+    // Disconnect logic
+    if (bluetoothDevice && audioRef.current) {
+        try {
+            if (bluetoothDevice.gatt?.connected) {
+                bluetoothDevice.gatt.disconnect();
+            }
+            await (audioRef.current as any).setSinkId('');
+            setBluetoothDevice(null);
+            console.log('Disconnected from Bluetooth device.');
+        } catch (error) {
+            console.error('Error disconnecting Bluetooth device:', error);
+            alert(`Failed to disconnect: ${(error as Error).message}`);
+        }
+        return;
+    }
+
+    // Connect logic
+    if (!isBluetoothSupported || !audioRef.current) {
+        alert('Web Bluetooth or Audio Output API is not supported on this browser.');
+        return;
+    }
+
+    try {
+        console.log('Requesting Bluetooth device...');
+        // FIX: Cast navigator to 'any' to access the Web Bluetooth API.
+        const device: BluetoothDevice = await (navigator as any).bluetooth.requestDevice({
+            acceptAllDevices: true,
+            optionalServices: ['audio_sink']
+        });
+
+        if (!device) return;
+
+        // Listen for disconnection events
+        device.addEventListener('gattserverdisconnected', () => {
+            setBluetoothDevice(null);
+            console.log('Bluetooth device disconnected.');
+            if (audioRef.current) {
+                (audioRef.current as any).setSinkId('');
+            }
+        });
+        
+        await (audioRef.current as any).setSinkId(device.id);
+        setBluetoothDevice(device);
+        console.log(`Audio output successfully set to ${device.name}`);
+
+    } catch (error) {
+        if ((error as Error).name === 'NotFoundError') {
+            console.log('User cancelled the device selection dialog.');
+        } else {
+            console.error('Web Bluetooth API Error:', error);
+            alert(`Error connecting to Bluetooth device: ${(error as Error).message}`);
+        }
+    }
+}, [bluetoothDevice, isBluetoothSupported]);
+
   const currentTrack = tracks.find(t => t.id === currentTrackId) || null;
   const editingTrack = tracks.find(t => t.id === editingTrackId) || null;
 
@@ -264,6 +340,9 @@ const App: React.FC = () => {
             onSeek={handleSeek}
             onVolumeChange={setVolume}
             onExpand={() => setIsNowPlayingVisible(true)}
+            isBluetoothSupported={isBluetoothSupported}
+            isBluetoothConnected={bluetoothDevice !== null}
+            onBluetoothConnect={handleBluetoothConnect}
         />
       </footer>
       <audio 

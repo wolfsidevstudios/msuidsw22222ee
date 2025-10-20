@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 interface IconProps {
@@ -94,5 +93,17 @@ export const VideoCameraIcon: React.FC<IconProps> = ({ className = "w-6 h-6" }) 
 export const PhotoIcon: React.FC<IconProps> = ({ className = "w-6 h-6" }) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+    </svg>
+);
+
+export const BluetoothIcon: React.FC<IconProps> = ({ className = "w-6 h-6" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M10.627 3.322c.39.318.614.78.614 1.252v14.852c0 .472-.224.934-.614 1.252a1.245 1.245 0 01-1.253.217l-4.22-2.11a1.22 1.22 0 00-.735 0l-1.396.698a1.245 1.245 0 01-1.464-1.63L3.3 12 1.547 6.44a1.245 1.245 0 011.464-1.63l1.396.698a1.22 1.22 0 00.735 0l4.22-2.11a1.245 1.245 0 011.253.217zM14.373 3.322c-.39.318-.614.78-.614 1.252v14.852c0 .472.224.934.614 1.252a1.245 1.245 0 001.253.217l4.22-2.11a1.22 1.22 0 01.735 0l1.396.698a1.245 1.245 0 001.464-1.63L20.7 12l1.753-5.56a1.245 1.245 0 00-1.464-1.63l-1.396.698a1.22 1.22 0 01-.735 0l-4.22-2.11a1.245 1.245 0 00-1.253.217z" />
+    </svg>
+);
+
+export const BluetoothConnectedIcon: React.FC<IconProps> = ({ className = "w-6 h-6" }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M10.627 3.322c.39.318.614.78.614 1.252v14.852c0 .472-.224.934-.614 1.252a1.245 1.245 0 01-1.253.217l-4.22-2.11a1.22 1.22 0 00-.735 0l-1.396.698a1.245 1.245 0 01-1.464-1.63L3.3 12 1.547 6.44a1.245 1.245 0 011.464-1.63l1.396.698a1.22 1.22 0 00.735 0l4.22-2.11a1.245 1.245 0 011.253.217zM14.373 3.322c-.39.318-.614.78-.614 1.252v14.852c0 .472.224.934.614 1.252a1.245 1.245 0 001.253.217l4.22-2.11a1.22 1.22 0 01.735 0l1.396.698a1.245 1.245 0 001.464-1.63L20.7 12l1.753-5.56a1.245 1.245 0 00-1.464-1.63l-1.396.698a1.22 1.22 0 01-.735 0l-4.22-2.11a1.245 1.245 0 00-1.253.217z" />
     </svg>
 );
